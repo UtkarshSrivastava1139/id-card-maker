@@ -1,6 +1,6 @@
 
 import { Home, Folder, LayoutTemplate, Settings } from 'lucide-react';
-import { useProjectStore } from '../../store/projectStore';
+
 
 export default function Sidebar() {
   // useProjectStore is not used to read currentProject here
