@@ -1,0 +1,55 @@
+{
+  "id": "school-default-card",
+  "name": "Standard School ID (Blank)",
+  "version": 1,
+  "type": "card-design",
+  "isReadonly": true,
+  "width": 54,
+  "height": 85.6,
+  "backgroundImage": null,
+  "elements": [
+    {
+      "id": "t1",
+      "type": "text",
+      "x": 10,
+      "y": 10,
+      "width": 34,
+      "height": 10,
+      "zIndex": 1,
+      "content": "Student ID Card",
+      "fontFamily": "Inter",
+      "fontSize": 14,
+      "color": "#333333",
+      "align": "center",
+      "weight": "bold"
+    },
+    {
+      "id": "p1",
+      "type": "photo",
+      "x": 12,
+      "y": 25,
+      "width": 30,
+      "height": 38,
+      "zIndex": 2,
+      "borderRadius": 2,
+      "borderColor": "#e2e8f0",
+      "borderWidth": 1
+    },
+    {
+      "id": "t2",
+      "type": "text",
+      "x": 10,
+      "y": 68,
+      "width": 34,
+      "height": 6,
+      "zIndex": 3,
+      "content": "{{First Name}} {{Last Name}}",
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "color": "#0f172a",
+      "align": "center",
+      "weight": "bold"
+    }
+  ],
+  "guidelines": []
+}

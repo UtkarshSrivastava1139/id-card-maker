@@ -1,0 +1,26 @@
+{
+  "id": "production-2x5",
+  "name": "ID Card - 2x5 (85.6 x 54)",
+  "version": 1,
+  "type": "print-layout",
+  "description": "Standard 2x5 production layout on A4 paper",
+  "isReadonly": true,
+  "paperSize": "a4",
+  "pageWidth": 210,
+  "pageHeight": 297,
+  "orientation": "portrait",
+  "addCropMarks": true,
+  "bleed": 0,
+  "slots": [
+    {"id": "slot_1", "x": 14.4, "y": 9.5, "width": 85.6, "height": 54, "rotation": 90},
+    {"id": "slot_2", "x": 14.4, "y": 65.5, "width": 85.6, "height": 54, "rotation": 90},
+    {"id": "slot_3", "x": 14.4, "y": 121.5, "width": 85.6, "height": 54, "rotation": 90},
+    {"id": "slot_4", "x": 14.4, "y": 177.5, "width": 85.6, "height": 54, "rotation": 90},
+    {"id": "slot_5", "x": 14.4, "y": 233.5, "width": 85.6, "height": 54, "rotation": 90},
+    {"id": "slot_6", "x": 110, "y": 9.5, "width": 85.6, "height": 54, "rotation": 90},
+    {"id": "slot_7", "x": 110, "y": 65.5, "width": 85.6, "height": 54, "rotation": 90},
+    {"id": "slot_8", "x": 110, "y": 121.5, "width": 85.6, "height": 54, "rotation": 90},
+    {"id": "slot_9", "x": 110, "y": 177.5, "width": 85.6, "height": 54, "rotation": 90},
+    {"id": "slot_10", "x": 110, "y": 233.5, "width": 85.6, "height": 54, "rotation": 90}
+  ]
+}

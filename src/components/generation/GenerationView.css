@@ -1,0 +1,160 @@
+.generation-blocked {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  text-align: center;
+  gap: var(--space-16);
+  padding: var(--space-32);
+}
+
+.generation-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.generation-layout {
+  display: flex;
+  gap: var(--space-24);
+  height: 100%;
+}
+
+.generation-settings {
+  flex: 0 0 350px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-20);
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-bottom: var(--space-24);
+  padding-bottom: var(--space-16);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  flex: 1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.form-row {
+  flex-direction: row;
+}
+
+.form-row > div {
+  flex: 1;
+}
+
+.format-toggle {
+  display: flex;
+  background: var(--bg-app);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.format-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-12);
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.format-btn:hover {
+  background: var(--bg-hover);
+}
+
+.format-btn.active {
+  background: var(--primary);
+  color: white;
+}
+
+.generation-action {
+  margin-top: auto;
+  padding-top: var(--space-24);
+}
+
+.generation-error {
+  padding: var(--space-12);
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-16);
+  font-size: 13px;
+}
+
+.progress-container {
+  margin-top: var(--space-16);
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--bg-app);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--space-8);
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.1s linear;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  display: block;
+}
+
+.generation-preview {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-32);
+}
+
+.preview-canvas-container {
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: white;
+}
+
+.preview-canvas {
+  display: block;
+  max-width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+}

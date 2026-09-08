@@ -1,0 +1,82 @@
+.dataset-view {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.dataset-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-16);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pk-selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: var(--space-16);
+  background-color: var(--bg-app);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.pk-selector label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.pk-selector .input-field {
+  max-width: 300px;
+}
+
+.issues-box {
+  margin-top: var(--space-8);
+  padding: var(--space-12);
+  background-color: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+}
+
+.issue-list {
+  margin-top: var(--space-4);
+  margin-left: var(--space-20);
+  font-size: 13px;
+}
+
+.table-container {
+  overflow-x: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.data-table th, .data-table td {
+  padding: var(--space-12);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.data-table th {
+  background-color: var(--bg-app);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.data-table tr:hover td {
+  background-color: var(--bg-surface-hover);
+}
+
+.table-footer {
+  padding: var(--space-12);
+  background-color: var(--bg-app);
+  text-align: center;
+  font-size: 13px;
+}

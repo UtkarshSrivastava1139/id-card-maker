@@ -1,0 +1,82 @@
+.dashboard {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.welcome-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-32);
+  margin-bottom: var(--space-40);
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-64);
+  background-color: var(--bg-surface);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.empty-icon {
+  color: var(--border-color);
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-20);
+}
+
+.project-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.project-card:hover {
+  border-color: var(--border-color-focus);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.project-card-header {
+  padding: var(--space-16);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.project-card-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.project-card-body {
+  padding: var(--space-16);
+}
+
+.card-preview-placeholder {
+  height: 140px;
+  background-color: var(--bg-app);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--space-16);
+}
+
+.project-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-size: 13px;
+}

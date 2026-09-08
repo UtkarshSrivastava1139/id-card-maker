@@ -1,0 +1,142 @@
+{
+  "id": "478ec383-675f-487e-ba2a-249be560c9f5",
+  "name": "SRDCA 2026-27",
+  "version": 1,
+  "type": "card-design",
+  "isReadonly": true,
+  "backgroundImage": "src/assets/srdca.png",
+  "elements": [
+    {
+      "id": "p1",
+      "type": "photo",
+      "x": 21.4,
+      "y": 14.2,
+      "width": 20.73951580896944,
+      "height": 25.432200026458528,
+      "zIndex": 2,
+      "borderRadius": 2,
+      "borderColor": "#e2e8f0",
+      "borderWidth": 1
+    },
+    {
+      "id": "t2",
+      "type": "text",
+      "x": 23,
+      "y": 49.4,
+      "width": 30.56039158618865,
+      "height": 6,
+      "zIndex": 3,
+      "content": "{{Father name}}",
+      "fontFamily": "Inter",
+      "fontSize": 9,
+      "color": "#0f172a",
+      "align": "left",
+      "weight": "normal"
+    },
+    {
+      "id": "6rwztzn",
+      "type": "text",
+      "x": 0.25307580367773497,
+      "y": 41.2,
+      "width": 53.49384839264453,
+      "height": 6.692684217489086,
+      "zIndex": 3,
+      "content": "{{Name}}",
+      "fontFamily": "Inter",
+      "fontSize": 12,
+      "color": "#000000",
+      "align": "center",
+      "weight": "bold",
+      "uppercase": true
+    },
+    {
+      "id": "meo7yte",
+      "type": "text",
+      "x": 6.603122106098691,
+      "y": 36.8,
+      "width": 8.911231644397407,
+      "height": 5,
+      "zIndex": 4,
+      "content": "{{SID}}",
+      "fontFamily": "Inter",
+      "fontSize": 8,
+      "color": "#ffffff",
+      "align": "left",
+      "weight": "normal"
+    },
+    {
+      "id": "pooc8fk",
+      "type": "text",
+      "x": 10.6,
+      "y": 54.6,
+      "width": 13.541473739912691,
+      "height": 5,
+      "zIndex": 5,
+      "content": "{{Class}}",
+      "fontFamily": "Inter",
+      "fontSize": 9,
+      "color": "#000000",
+      "align": "left",
+      "weight": "normal"
+    },
+    {
+      "id": "9qjhrt0",
+      "type": "text",
+      "x": 20.05423997883318,
+      "y": 59.6,
+      "width": 33.385368434978176,
+      "height": 5,
+      "zIndex": 6,
+      "content": "{{Mobile}}",
+      "fontFamily": "Inter",
+      "fontSize": 9,
+      "color": "#000000",
+      "align": "left",
+      "weight": "normal"
+    },
+    {
+      "id": "ulyyvek",
+      "type": "text",
+      "x": 14.6,
+      "y": 64.8,
+      "width": 38.8,
+      "height": 11.8,
+      "zIndex": 7,
+      "content": "{{Address}}",
+      "fontFamily": "Inter",
+      "fontSize": 9,
+      "color": "#000000",
+      "align": "left",
+      "weight": "normal"
+    },
+    {
+      "id": "fnstdht",
+      "type": "qrcode",
+      "x": 1.4547840322794006,
+      "y": 20.704590554306126,
+      "width": 12.9,
+      "height": 12.856197909776427,
+      "zIndex": 8,
+      "content": "SID: {{SID}}, NAME: {{Name}}, CLASS: {{Class}}, Mobile: {{Mobile}}"
+    }
+  ],
+  "guidelines": [
+    {
+      "id": "z92m5ji",
+      "axis": "y",
+      "pos": 68.45523548088372
+    },
+    {
+      "id": "8zv5gxp",
+      "axis": "x",
+      "pos": 14.354784032279401
+    },
+    {
+      "id": "p5ebwar",
+      "axis": "x",
+      "pos": 53.38111026590819
+    }
+  ],
+  "width": 54,
+  "height": 85.6
+}

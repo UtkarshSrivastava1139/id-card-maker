@@ -1,0 +1,82 @@
+.design-view {
+  display: flex;
+  height: 100%;
+  gap: var(--space-24);
+  overflow: hidden;
+}
+
+.design-left-panel {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  padding-right: var(--space-16);
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+}
+
+.design-center-panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--bg-surface-hover);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-color);
+  overflow: hidden;
+  position: relative;
+}
+
+.empty-canvas-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.toolbar {
+  display: flex;
+  flex-direction: column;
+}
+
+.properties-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.properties-panel.empty {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-24);
+}
+
+.canvas-wrapper {
+  /* Scrollbars will show here if canvas is larger than viewport */
+}
+
+.canvas-element:hover {
+  border: 1px dashed var(--text-secondary) !important;
+}
+
+.canvas-element.selected {
+  border: 2px solid var(--primary) !important;
+  z-index: 999 !important;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-icon:hover {
+  background: var(--bg-surface-hover);
+}

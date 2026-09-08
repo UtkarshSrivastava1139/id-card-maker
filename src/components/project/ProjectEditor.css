@@ -1,0 +1,41 @@
+.project-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.editor-tabs {
+  display: flex;
+  gap: var(--space-24);
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0;
+  margin-bottom: var(--space-24);
+}
+
+.tab-btn {
+  padding: var(--space-12) 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+  font-weight: 600;
+}
+
+.editor-content {
+  flex: 1;
+  overflow-y: auto;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-24);
+}

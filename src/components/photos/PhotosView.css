@@ -1,0 +1,76 @@
+.photos-view {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.photos-config {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+}
+
+.photos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: var(--space-16);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.config-card {
+  padding: var(--space-20);
+  background-color: var(--bg-app);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+  max-width: 500px;
+}
+
+.stats-row {
+  display: flex;
+  gap: var(--space-16);
+  margin-bottom: var(--space-24);
+}
+
+.stat-box {
+  flex: 1;
+  padding: var(--space-16);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  background-color: var(--bg-surface);
+}
+
+.stat-box.success {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.stat-box.warning {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.stat-label {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.missing-list {
+  padding: var(--space-16);
+  background-color: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+}
