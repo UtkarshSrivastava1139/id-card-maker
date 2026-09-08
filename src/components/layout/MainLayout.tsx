@@ -5,12 +5,14 @@ import './Layout.css';
 
 interface MainLayoutProps {
   children: React.ReactNode;
+  activeModule: 'id-card' | 'capture';
+  setActiveModule: (m: 'id-card' | 'capture') => void;
 }
 
-export default function MainLayout({ children }: MainLayoutProps) {
+export default function MainLayout({ children, activeModule, setActiveModule }: MainLayoutProps) {
   return (
     <div className="layout-container">
-      <Sidebar />
+      <Sidebar activeModule={activeModule} setActiveModule={setActiveModule} />
       <div className="layout-main">
         <TopBar />
         <main className="layout-content">

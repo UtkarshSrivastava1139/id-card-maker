@@ -1,9 +1,20 @@
+import { Home, Folder, LayoutTemplate, Settings, Camera } from 'lucide-react';
+import { useProjectStore } from '../../store/projectStore';
 
-import { Home, Folder, LayoutTemplate, Settings } from 'lucide-react';
+interface SidebarProps {
+  activeModule: 'id-card' | 'capture';
+  setActiveModule: (m: 'id-card' | 'capture') => void;
+}
 
+export default function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
+  const closeProject = useProjectStore((state) => state.closeProject);
 
-export default function Sidebar() {
-  // useProjectStore is not used to read currentProject here
+  const handleNav = (module: 'id-card' | 'capture') => {
+    setActiveModule(module);
+    if (module === 'id-card') {
+      closeProject(); // Ensure we go back to Dashboard when clicking Home
+    }
+  };
 
   return (
     <aside className="sidebar">
@@ -12,30 +23,45 @@ export default function Sidebar() {
       </div>
       
       <nav className="sidebar-nav">
-        <a href="#" className="nav-item active">
-          <Home size={18} />
-          <span>Dashboard</span>
-        </a>
-        
+        <div className="nav-section" style={{ marginTop: '0' }}>
+          <h3 className="nav-section-title">Modules</h3>
+          <button 
+            className={`nav-item ${activeModule === 'id-card' ? 'active' : ''}`}
+            onClick={() => handleNav('id-card')}
+            style={{ width: '100%', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left' }}
+          >
+            <Home size={18} />
+            <span>ID Card Generator</span>
+          </button>
+          
+          <button 
+            className={`nav-item ${activeModule === 'capture' ? 'active' : ''}`}
+            onClick={() => handleNav('capture')}
+            style={{ width: '100%', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left' }}
+          >
+            <Camera size={18} />
+            <span>Photo Capture Studio</span>
+          </button>
+        </div>
+
         <div className="nav-section">
-          <h3 className="nav-section-title">Projects</h3>
-          <a href="#" className="nav-item">
+          <h3 className="nav-section-title">Library</h3>
+          <button className="nav-item" style={{ width: '100%', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left' }}>
             <Folder size={18} />
             <span>All Projects</span>
-          </a>
+          </button>
+          <button className="nav-item" style={{ width: '100%', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left' }}>
+            <LayoutTemplate size={18} />
+            <span>Templates</span>
+          </button>
         </div>
-        
-        <a href="#" className="nav-item">
-          <LayoutTemplate size={18} />
-          <span>Templates</span>
-        </a>
       </nav>
 
       <div className="sidebar-footer">
-        <a href="#" className="nav-item">
+        <button className="nav-item" style={{ width: '100%', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left' }}>
           <Settings size={18} />
           <span>Settings</span>
-        </a>
+        </button>
       </div>
     </aside>
   );
