@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useTemplateStore } from '../../store/templateStore';
 import { useDatasetStore } from '../../store/datasetStore';
 import { Trash2, Copy, ArrowUpToLine, ArrowDownToLine } from 'lucide-react';

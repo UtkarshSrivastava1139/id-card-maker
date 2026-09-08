@@ -1,5 +1,5 @@
-import React from 'react';
-import { Type, Image, QrCode, ZoomIn, ZoomOut, Download, FileJson } from 'lucide-react';
+
+import { Type, Image, QrCode, ZoomIn, ZoomOut, Download } from 'lucide-react';
 import { useTemplateStore } from '../../store/templateStore';
 import { useDatasetStore } from '../../store/datasetStore';
 import { TemplateRegistry } from '../../templates/registry';

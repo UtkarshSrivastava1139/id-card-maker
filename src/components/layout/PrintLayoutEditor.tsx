@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLayoutStore } from '../../store/layoutStore';
 import type { PrintLayoutTemplate, PrintSlot } from '../../types/layout';
 import { ChevronLeft, Plus, Copy, Trash2, Save, Layout, Download } from 'lucide-react';

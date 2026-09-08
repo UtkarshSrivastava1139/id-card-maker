@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { usePhotoStore } from '../../store/photoStore';
 import { useDatasetStore } from '../../store/datasetStore';
 import { scanDirectory, matchPhotos } from '../../services/photos';

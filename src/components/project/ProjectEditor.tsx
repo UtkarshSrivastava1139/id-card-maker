@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useProjectStore } from '../../store/projectStore';
 import DatasetView from '../dataset/DatasetView';
 import PhotosView from '../photos/PhotosView';

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDatasetStore } from '../../store/datasetStore';
 import { usePhotoStore } from '../../store/photoStore';
 import { useTemplateStore } from '../../store/templateStore';

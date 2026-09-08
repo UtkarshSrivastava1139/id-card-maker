@@ -1,9 +1,9 @@
-import React from 'react';
+
 import { Home, Folder, LayoutTemplate, Settings } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
 
 export default function Sidebar() {
-  const currentProject = useProjectStore((state) => state.currentProject);
+  // useProjectStore is not used to read currentProject here
 
   return (
     <aside className="sidebar">

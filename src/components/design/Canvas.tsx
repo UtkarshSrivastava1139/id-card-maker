@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useTemplateStore } from '../../store/templateStore';
 import { useProjectStore } from '../../store/projectStore';
 
@@ -15,7 +15,7 @@ export default function Canvas() {
     updateElement,
     addGuideline,
     updateGuideline,
-    removeGuideline,
+    // removeGuideline is unused here
     zoom 
   } = useTemplateStore();
   
@@ -66,7 +66,7 @@ export default function Canvas() {
       updateGuideline(draggingGuide.id, pos);
     };
     
-    const onUp = (e: PointerEvent) => {
+    const onUp = () => {
       const state = useTemplateStore.getState();
       const finalPos = state.guidelines.find(g => g.id === draggingGuide.id)?.pos;
       

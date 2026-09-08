@@ -1,4 +1,4 @@
-import React from 'react';
+
 import MainLayout from './components/layout/MainLayout';
 import Dashboard from './components/project/Dashboard';
 import ProjectEditor from './components/project/ProjectEditor';
