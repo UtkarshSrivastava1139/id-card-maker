@@ -6,6 +6,8 @@ import { selectLocalFolder } from '../../services/fileSystem';
 import Button from '../ui/Button';
 import './PhotosView.css';
 
+import { extractPhotosFromZip } from '../../services/mobileImport';
+
 export default function PhotosView() {
   const { dataset, primaryKeyField } = useDatasetStore();
   const { directoryHandle, photoFiles, matchConfig, matches, setDirectoryHandle, setMatchConfig, setMatches, clearPhotos } = usePhotoStore();
@@ -18,27 +20,45 @@ export default function PhotosView() {
       const { handle, files } = await selectLocalFolder();
       
       let finalFiles = files;
-      // If we got a handle, it means showDirectoryPicker worked and we need to scan it
       if (handle) {
         finalFiles = await scanDirectory(handle, matchConfig.recursiveSearch);
       }
       
-      // If we didn't get a handle (fallback), `files` is already populated from the input element.
-      // But we still need to filter for images since the user might have selected a folder with non-images.
       const imageFiles = finalFiles.filter(f => {
         const ext = f.name.split('.').pop()?.toLowerCase();
         return ['jpg', 'jpeg', 'png', 'webp'].includes(ext || '');
       });
       
-      // If handle is null (fallback mode), we set handle to a dummy string or something?
-      // No, we can just set it to null, but wait! The UI checks `!directoryHandle` to know if a folder is selected!
-      // If handle is null but we have files, the UI will still show "Select Folder".
-      // We should use a dummy object like `{ fallback: true, name: "Local Folder" }` if handle is null.
       const handleToSave = handle || { name: 'Local Folder (Fallback Mode)', fallback: true };
       
       setDirectoryHandle(handleToSave, imageFiles);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImportZip = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setLoading(true);
+      const extractedFiles = await extractPhotosFromZip(file);
+      
+      if (extractedFiles.length === 0) {
+        alert("No valid images found in the ZIP.");
+        return;
+      }
+      
+      // Store dummy handle for the ZIP import
+      const handleToSave = { name: file.name, fallback: true, isZip: true };
+      setDirectoryHandle(handleToSave as any, extractedFiles);
+
+    } catch (err) {
+      console.error("Failed to extract ZIP:", err);
+      alert("Failed to import Mobile ZIP. Please ensure it is a valid ZIP file.");
     } finally {
       setLoading(false);
     }
@@ -70,11 +90,24 @@ export default function PhotosView() {
         <div className="empty-state">
           <h3 className="h2">Connect student photos</h3>
           <p className="body text-secondary" style={{ marginTop: '8px', marginBottom: '24px' }}>
-            Select a local folder containing your student photos.
+            Select a local folder containing your student photos, or import a ZIP from Mobile Capture.
           </p>
-          <Button onClick={handleSelectFolder} disabled={loading}>
-            {loading ? 'Scanning folder...' : 'Select Folder'}
-          </Button>
+          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center' }}>
+            <Button onClick={handleSelectFolder} disabled={loading}>
+              {loading ? 'Scanning folder...' : 'Select Folder'}
+            </Button>
+            
+            <label htmlFor="zip-upload" className="btn btn-secondary" style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
+              Import Mobile ZIP
+            </label>
+            <input 
+              id="zip-upload"
+              type="file"
+              accept=".zip"
+              style={{ display: 'none' }}
+              onChange={handleImportZip}
+            />
+          </div>
         </div>
       ) : (
         <div className="photos-config">

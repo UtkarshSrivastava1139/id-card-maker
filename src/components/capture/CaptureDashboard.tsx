@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useCaptureStore } from '../../store/captureStore';
 import Button from '../ui/Button';
-import { Camera, Play, Download, Search, CheckCircle, XCircle, Clock, Upload } from 'lucide-react';
+import { Camera, Play, Download, Search, CheckCircle, XCircle, Clock, Upload, Smartphone } from 'lucide-react';
 import { savePhotoToDirectory, selectLocalFolder } from '../../services/fileSystem';
+import MobileSessionModal from './MobileSessionModal';
 
 interface CaptureDashboardProps {
   onStartSingleCapture: (recordId: string) => void;
@@ -15,6 +16,7 @@ export default function CaptureDashboard({ onStartSingleCapture, onStartBulkCapt
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'all' | 'pending' | 'captured' | 'skipped'>('all');
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showMobileModal, setShowMobileModal] = useState(false);
 
   const handleUploadPhoto = async (recordId: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -75,6 +77,9 @@ export default function CaptureDashboard({ onStartSingleCapture, onStartBulkCapt
           )}
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
+          <Button variant="secondary" onClick={() => setShowMobileModal(true)} icon={<Smartphone size={16} />}>
+            Use Mobile Camera
+          </Button>
           <Button variant="secondary" onClick={handleSelectFolder}>
             Change Folder
           </Button>
@@ -238,6 +243,9 @@ export default function CaptureDashboard({ onStartSingleCapture, onStartBulkCapt
             </div>
           </div>
         </div>
+      )}
+      {showMobileModal && (
+        <MobileSessionModal onClose={() => setShowMobileModal(false)} />
       )}
     </div>
   );
