@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { PrintLayoutTemplate } from '../types/layout';
 import { TemplateRegistry } from '../templates/registry';
+import { idbStateStorage } from './storage';
 
 interface LayoutState {
   templates: PrintLayoutTemplate[];
@@ -39,6 +40,7 @@ export const useLayoutStore = create<LayoutState>()(
     }),
     {
       name: 'id-card-layout-storage',
+      storage: idbStateStorage,
       merge: (persistedState: any, currentState) => {
         // Keep local drafts (isReadonly=false) from local storage
         // OVERWRITE any built-ins with the fresh ones from Git/Registry

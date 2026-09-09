@@ -47,7 +47,16 @@ export async function generateBulk(
       const ext = settings.fileFormat === 'jpeg' ? 'jpg' : 'png';
       zip.file(`card_${pk}.${ext}`, blob);
       
+      // Aggressive GC hint
+      canvas.width = 0;
+      canvas.height = 0;
+
       onProgress(i + 1, total);
+
+      // Yield to event loop to allow GC of blob construction variables
+      if (i % 20 === 0) {
+        await new Promise(r => setTimeout(r, 0));
+      }
     }
     
     const zipBlob = await zip.generateAsync({ type: 'blob' });
@@ -89,32 +98,33 @@ export async function generateBulk(
       }
       
       // Apply rotation if required by the slot
+      let rotatedCanvas: HTMLCanvasElement | null = null;
       if (slot.rotation === 90 || slot.rotation === 270) {
-        const rotatedCanvas = document.createElement('canvas');
+        rotatedCanvas = document.createElement('canvas');
         rotatedCanvas.width = canvas.height;
         rotatedCanvas.height = canvas.width;
         const rctx = rotatedCanvas.getContext('2d')!;
         rctx.translate(rotatedCanvas.width / 2, rotatedCanvas.height / 2);
         rctx.rotate((slot.rotation * Math.PI) / 180);
         rctx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
-        canvas = rotatedCanvas;
       } else if (slot.rotation === 180) {
-        const rotatedCanvas = document.createElement('canvas');
+        rotatedCanvas = document.createElement('canvas');
         rotatedCanvas.width = canvas.width;
         rotatedCanvas.height = canvas.height;
         const rctx = rotatedCanvas.getContext('2d')!;
         rctx.translate(rotatedCanvas.width / 2, rotatedCanvas.height / 2);
         rctx.rotate((180 * Math.PI) / 180);
         rctx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
-        canvas = rotatedCanvas;
       }
+
+      const finalCanvas = rotatedCanvas || canvas;
       
       const x = slot.x;
       const y = slot.y;
       const cardW = slot.width;
       const cardH = slot.height;
       
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+      const dataUrl = finalCanvas.toDataURL('image/jpeg', 0.95);
       pdf.addImage(dataUrl, 'JPEG', x, y, cardW, cardH);
       
       if (printLayout.addCropMarks) {
@@ -131,7 +141,20 @@ export async function generateBulk(
         pdf.line(x + cardW + l, y + cardH, x + cardW, y + cardH);
       }
       
+      // Aggressive GC hints
+      canvas.width = 0;
+      canvas.height = 0;
+      if (rotatedCanvas) {
+        rotatedCanvas.width = 0;
+        rotatedCanvas.height = 0;
+      }
+
       onProgress(i + 1, total);
+
+      // Yield to event loop to allow GC of large image data URLs
+      if (i % 20 === 0) {
+        await new Promise(r => setTimeout(r, 0));
+      }
     }
     
     pdf.save('id_cards_print.pdf');

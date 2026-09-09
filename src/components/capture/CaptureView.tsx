@@ -3,10 +3,11 @@ import { useCaptureStore } from '../../store/captureStore';
 import { useDatasetStore } from '../../store/datasetStore';
 import { usePhotoStore } from '../../store/photoStore';
 import { parseDatasetFile } from '../../services/dataset';
+import { selectLocalFolder } from '../../services/fileSystem';
 import Button from '../ui/Button';
 import CaptureDashboard from './CaptureDashboard';
 import CameraInterface from './CameraInterface';
-import { ArrowRight, Upload } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Papa from 'papaparse';
 
 interface CaptureViewProps {
@@ -17,7 +18,6 @@ export default function CaptureView({ onShiftToIdCard }: CaptureViewProps) {
   const { dataset, initSession, records, directoryHandle, primaryKeyField } = useCaptureStore();
   
   // Local state for setup
-  const [file, setFile] = useState<File | null>(null);
   const [headers, setHeaders] = useState<string[]>([]);
   const [selectedKey, setSelectedKey] = useState<string>('');
   const [parsedData, setParsedData] = useState<any>(null);
@@ -30,7 +30,6 @@ export default function CaptureView({ onShiftToIdCard }: CaptureViewProps) {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setFile(file);
 
     try {
       const data = await parseDatasetFile(file);
@@ -92,7 +91,7 @@ export default function CaptureView({ onShiftToIdCard }: CaptureViewProps) {
   const shiftToIdCard = () => {
     // Optionally automatically populate the global stores
     const { setDataset, setPrimaryKeyField } = useDatasetStore.getState();
-    const { setDirectoryHandle: setGlobalDir, setMatches } = usePhotoStore.getState();
+    const { setDirectoryHandle: setGlobalDir } = usePhotoStore.getState();
 
     if (dataset && selectedKey) {
       setDataset(dataset);
@@ -101,18 +100,7 @@ export default function CaptureView({ onShiftToIdCard }: CaptureViewProps) {
 
     if (directoryHandle) {
       // We pass the same directoryHandle to the photoStore
-      setGlobalDir(directoryHandle, []); // files array might be empty initially, they'd have to rescan or we map matches directly
-      
-      // Map existing records to matches automatically based on capture store
-      const matches: Record<string, any> = {};
-      records.forEach(r => {
-        if (r.status === 'captured' && r.photoFilename) {
-           // We don't easily have the `File` object here unless we tracked it.
-           // ID Card module requires a `File` object for matches.
-           // For seamless shift, if they rescan the folder in PhotosView it works,
-           // or we can just leave it to them to click "Select Folder" and rescan.
-        }
-      });
+      setGlobalDir(directoryHandle, []); 
     }
 
     onShiftToIdCard();
@@ -137,9 +125,9 @@ export default function CaptureView({ onShiftToIdCard }: CaptureViewProps) {
 
   const handleSelectFolder = async () => {
     try {
-      // @ts-ignore
-      const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-      setDirectoryHandle(dirHandle);
+      const { handle } = await selectLocalFolder();
+      const handleToSave = handle || { name: 'Local Folder (Fallback Mode)', fallback: true };
+      setDirectoryHandle(handleToSave);
     } catch (err) {
       console.error(err);
     }
@@ -197,6 +185,11 @@ export default function CaptureView({ onShiftToIdCard }: CaptureViewProps) {
             <Button variant="secondary" onClick={handleSelectFolder}>
               {directoryHandle ? `Selected: ${directoryHandle.name}` : 'Choose Local Folder...'}
             </Button>
+            {directoryHandle?.fallback && (
+              <p className="text-warning text-small" style={{ marginTop: '12px' }}>
+                Direct folder saving is unavailable in your browser. Photos will be saved temporarily and can be exported as a ZIP later.
+              </p>
+            )}
           </div>
 
           {/* Step 3: Camera */}

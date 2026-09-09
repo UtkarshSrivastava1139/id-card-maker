@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { usePhotoStore } from '../../store/photoStore';
 import { useDatasetStore } from '../../store/datasetStore';
 import { scanDirectory, matchPhotos } from '../../services/photos';
+import { selectLocalFolder } from '../../services/fileSystem';
 import Button from '../ui/Button';
 import './PhotosView.css';
 
@@ -13,11 +14,29 @@ export default function PhotosView() {
 
   const handleSelectFolder = async () => {
     try {
-      // @ts-ignore
-      const dirHandle = await window.showDirectoryPicker();
       setLoading(true);
-      const files = await scanDirectory(dirHandle, matchConfig.recursiveSearch);
-      setDirectoryHandle(dirHandle, files);
+      const { handle, files } = await selectLocalFolder();
+      
+      let finalFiles = files;
+      // If we got a handle, it means showDirectoryPicker worked and we need to scan it
+      if (handle) {
+        finalFiles = await scanDirectory(handle, matchConfig.recursiveSearch);
+      }
+      
+      // If we didn't get a handle (fallback), `files` is already populated from the input element.
+      // But we still need to filter for images since the user might have selected a folder with non-images.
+      const imageFiles = finalFiles.filter(f => {
+        const ext = f.name.split('.').pop()?.toLowerCase();
+        return ['jpg', 'jpeg', 'png', 'webp'].includes(ext || '');
+      });
+      
+      // If handle is null (fallback mode), we set handle to a dummy string or something?
+      // No, we can just set it to null, but wait! The UI checks `!directoryHandle` to know if a folder is selected!
+      // If handle is null but we have files, the UI will still show "Select Folder".
+      // We should use a dummy object like `{ fallback: true, name: "Local Folder" }` if handle is null.
+      const handleToSave = handle || { name: 'Local Folder (Fallback Mode)', fallback: true };
+      
+      setDirectoryHandle(handleToSave, imageFiles);
     } catch (err) {
       console.error(err);
     } finally {
@@ -128,7 +147,7 @@ export default function PhotosView() {
                           <td style={{ padding: '8px 12px' }}>
                             {m.file ? (
                               <img 
-                                src={URL.createObjectURL(m.file)} 
+                                src={m.objectUrl || ''} 
                                 alt={`Photo for ${m.recordId}`} 
                                 style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} 
                               />

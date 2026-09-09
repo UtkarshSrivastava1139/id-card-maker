@@ -49,6 +49,19 @@ export default function PrintLayoutEditor({ onClose }: PrintLayoutEditorProps) {
 
   const handleSave = () => {
     if (isReadonly) return;
+
+    // Bounds checking
+    const outOfBounds = localTemplate.slots.some(slot => 
+      slot.x < 0 || slot.y < 0 || 
+      (slot.x + slot.width) > localTemplate.pageWidth || 
+      (slot.y + slot.height) > localTemplate.pageHeight
+    );
+
+    if (outOfBounds) {
+      alert("Cannot save: One or more slots are outside the page boundaries. Please adjust them to fit inside the page.");
+      return;
+    }
+
     updateTemplate(localTemplate.id, localTemplate);
     onClose();
   };

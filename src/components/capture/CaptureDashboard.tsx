@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useCaptureStore } from '../../store/captureStore';
 import Button from '../ui/Button';
-import { Camera, Play, Download, Search, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { Camera, Play, Download, Search, CheckCircle, XCircle, Clock, Upload } from 'lucide-react';
+import { savePhotoToDirectory, selectLocalFolder } from '../../services/fileSystem';
 
 interface CaptureDashboardProps {
   onStartSingleCapture: (recordId: string) => void;
@@ -10,16 +11,34 @@ interface CaptureDashboardProps {
 }
 
 export default function CaptureDashboard({ onStartSingleCapture, onStartBulkCapture, onExport }: CaptureDashboardProps) {
-  const { dataset, records, directoryHandle, setDirectoryHandle } = useCaptureStore();
+  const { records, directoryHandle, setDirectoryHandle, updateRecordStatus } = useCaptureStore();
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'all' | 'pending' | 'captured' | 'skipped'>('all');
   const [showExportModal, setShowExportModal] = useState(false);
 
+  const handleUploadPhoto = async (recordId: string, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!directoryHandle) {
+      alert("Please select a local folder first to save the photo.");
+      return;
+    }
+    const filename = `${recordId}.jpg`;
+    try {
+      await savePhotoToDirectory(directoryHandle, filename, file);
+      updateRecordStatus(recordId, 'captured', filename);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to save uploaded photo to directory.');
+    }
+    e.target.value = ''; // reset input
+  };
+
   const handleSelectFolder = async () => {
     try {
-      // @ts-ignore
-      const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-      setDirectoryHandle(dirHandle);
+      const { handle } = await selectLocalFolder();
+      const handleToSave = handle || { name: 'Local Folder (Fallback Mode)', fallback: true };
+      setDirectoryHandle(handleToSave);
     } catch (err) {
       console.error(err);
     }
@@ -49,6 +68,11 @@ export default function CaptureDashboard({ onStartSingleCapture, onStartBulkCapt
           <p className="text-secondary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             Saving photos to: <strong>{directoryHandle?.name}</strong>
           </p>
+          {directoryHandle?.fallback && (
+            <p className="text-warning text-small" style={{ marginTop: '4px' }}>
+              Direct folder saving is unavailable in your browser. Photos will be saved temporarily and can be exported as a ZIP later.
+            </p>
+          )}
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
           <Button variant="secondary" onClick={handleSelectFolder}>
@@ -142,14 +166,33 @@ export default function CaptureDashboard({ onStartSingleCapture, onStartBulkCapt
                     {r.status === 'skipped' && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--danger)', fontSize: '13px', fontWeight: 500 }}><XCircle size={14} /> Skipped</span>}
                   </td>
                   <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                    <Button 
-                      variant="secondary" 
-                      size="sm" 
-                      onClick={() => onStartSingleCapture(r.recordId)}
-                      icon={<Camera size={14} />}
-                    >
-                      {r.status === 'captured' ? 'Retake' : 'Capture'}
-                    </Button>
+                    <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                      <Button 
+                        variant="secondary" 
+                        size="sm" 
+                        onClick={() => onStartSingleCapture(r.recordId)}
+                        icon={<Camera size={14} />}
+                      >
+                        {r.status === 'captured' ? 'Retake' : 'Capture'}
+                      </Button>
+                      <div style={{ position: 'relative' }}>
+                        <input
+                          type="file"
+                          id={`file-upload-${r.recordId}`}
+                          accept="image/jpeg, image/png, image/webp"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleUploadPhoto(r.recordId, e)}
+                        />
+                        <Button 
+                          variant="secondary" 
+                          size="sm" 
+                          icon={<Upload size={14} />}
+                          onClick={() => document.getElementById(`file-upload-${r.recordId}`)?.click()}
+                        >
+                          Upload
+                        </Button>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               ))}

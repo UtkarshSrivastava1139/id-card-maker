@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Camera, RefreshCcw, Save, SkipForward, ArrowLeft } from 'lucide-react';
+import { Camera, RefreshCcw, Save, SkipForward, ArrowLeft, Upload } from 'lucide-react';
 import Button from '../ui/Button';
 import { useCaptureStore } from '../../store/captureStore';
 import { savePhotoToDirectory } from '../../services/fileSystem';
@@ -115,6 +115,14 @@ export default function CameraInterface({ mode, initialRecordId, onClose }: Came
         }, 'image/jpeg', 0.9);
       }
     }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCapturedPhoto(file);
+    setPhotoPreviewUrl(URL.createObjectURL(file));
+    e.target.value = ''; // reset input
   };
 
   const retakePhoto = () => {
@@ -244,9 +252,28 @@ export default function CameraInterface({ mode, initialRecordId, onClose }: Came
             )}
 
             {!capturedPhoto ? (
-              <Button onClick={capturePhoto} size="lg" icon={<Camera size={20} />} style={{ justifyContent: 'center', padding: '16px' }}>
-                Capture Photo
-              </Button>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Button onClick={capturePhoto} size="lg" icon={<Camera size={20} />} style={{ justifyContent: 'center', padding: '16px' }}>
+                  Capture Photo
+                </Button>
+                <div style={{ position: 'relative' }}>
+                  <input
+                    type="file"
+                    id="camera-upload-input"
+                    accept="image/jpeg, image/png, image/webp"
+                    style={{ display: 'none' }}
+                    onChange={handleFileUpload}
+                  />
+                  <Button 
+                    variant="secondary" 
+                    icon={<Upload size={18} />} 
+                    style={{ width: '100%', justifyContent: 'center' }}
+                    onClick={() => document.getElementById('camera-upload-input')?.click()}
+                  >
+                    Upload from Local
+                  </Button>
+                </div>
+              </div>
             ) : (
               <>
                 <Button onClick={savePhoto} size="lg" variant="primary" icon={<Save size={20} />} style={{ justifyContent: 'center', padding: '16px' }}>

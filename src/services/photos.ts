@@ -64,3 +64,11 @@ export function matchPhotos(
 
   return matches;
 }
+
+export function revokePhotoMatches(matches: Record<string, PhotoMatchResult>) {
+  Object.values(matches).forEach(m => {
+    if (m.objectUrl) {
+      URL.revokeObjectURL(m.objectUrl);
+    }
+  });
+}

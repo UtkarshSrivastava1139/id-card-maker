@@ -1,5 +1,7 @@
 import { create } from 'zustand';
-import type { Dataset, Record } from '../types/dataset';
+import { persist } from 'zustand/middleware';
+import type { Dataset } from '../types/dataset';
+import { idbStateStorage } from './storage';
 
 export type CaptureStatus = 'pending' | 'captured' | 'skipped' | 'error';
 
@@ -26,32 +28,40 @@ interface CaptureState {
   clearSession: () => void;
 }
 
-export const useCaptureStore = create<CaptureState>((set) => ({
-  dataset: null,
-  primaryKeyField: '',
-  directoryHandle: null,
-  records: [],
-  selectedDeviceId: '',
+export const useCaptureStore = create<CaptureState>()(
+  persist(
+    (set) => ({
+      dataset: null,
+      primaryKeyField: '',
+      directoryHandle: null,
+      records: [],
+      selectedDeviceId: '',
 
-  initSession: (dataset, primaryKeyField) => {
-    const records = dataset.records.map((r) => ({
-      recordId: String(r[primaryKeyField]),
-      fields: r,
-      status: 'pending' as CaptureStatus,
-    }));
-    set({ dataset, primaryKeyField, records });
-  },
+      initSession: (dataset, primaryKeyField) => {
+        const records = dataset.records.map((r) => ({
+          recordId: String(r[primaryKeyField]),
+          fields: r,
+          status: 'pending' as CaptureStatus,
+        }));
+        set({ dataset, primaryKeyField, records });
+      },
 
-  setDirectoryHandle: (handle) => set({ directoryHandle: handle }),
-  setSelectedDeviceId: (deviceId) => set({ selectedDeviceId: deviceId }),
+      setDirectoryHandle: (handle) => set({ directoryHandle: handle }),
+      setSelectedDeviceId: (deviceId) => set({ selectedDeviceId: deviceId }),
 
-  updateRecordStatus: (recordId, status, filename) => set((state) => ({
-    records: state.records.map(r => 
-      r.recordId === recordId 
-        ? { ...r, status, ...(filename ? { photoFilename: filename, capturedAt: new Date().toISOString() } : {}) }
-        : r
-    )
-  })),
+      updateRecordStatus: (recordId, status, filename) => set((state) => ({
+        records: state.records.map(r => 
+          r.recordId === recordId 
+            ? { ...r, status, ...(filename ? { photoFilename: filename, capturedAt: new Date().toISOString() } : {}) }
+            : r
+        )
+      })),
 
-  clearSession: () => set({ dataset: null, primaryKeyField: '', directoryHandle: null, records: [] })
-}));
+      clearSession: () => set({ dataset: null, primaryKeyField: '', directoryHandle: null, records: [] })
+    }),
+    {
+      name: 'id-card-capture-storage',
+      storage: idbStateStorage,
+    }
+  )
+);

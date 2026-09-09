@@ -28,7 +28,7 @@ export async function parseXLSX(file: File): Promise<Dataset> {
   const firstSheetName = workbook.SheetNames[0];
   const worksheet = workbook.Sheets[firstSheetName];
   
-  const records = XLSX.utils.sheet_to_json<DatasetRecord>(worksheet, { defval: '' });
+  const records = XLSX.utils.sheet_to_json<DatasetRecord>(worksheet, { defval: '', raw: false });
   
   if (records.length === 0) {
     return { headers: [], records: [] };
