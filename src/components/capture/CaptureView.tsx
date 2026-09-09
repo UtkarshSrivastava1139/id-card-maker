@@ -111,17 +111,38 @@ export default function CaptureView({ onShiftToIdCard }: CaptureViewProps) {
   const selectedDeviceId = useCaptureStore(state => state.selectedDeviceId);
   const { setSelectedDeviceId, setDirectoryHandle } = useCaptureStore();
 
+  const loadDevices = async () => {
+    try {
+      let deviceInfos = await navigator.mediaDevices.enumerateDevices();
+      let videoDevices = deviceInfos.filter(d => d.kind === 'videoinput');
+      
+      // If we have devices but no labels, we need to request permission to see the real names
+      if (videoDevices.length > 0 && !videoDevices[0].label) {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+        stream.getTracks().forEach(track => track.stop()); // Stop immediately
+        
+        // Enumerate again now that we have permission
+        deviceInfos = await navigator.mediaDevices.enumerateDevices();
+        videoDevices = deviceInfos.filter(d => d.kind === 'videoinput');
+      }
+
+      setDevices(videoDevices);
+      // Don't auto-select if we already have one, unless it's not in the list
+      const deviceExists = videoDevices.some(d => d.deviceId === selectedDeviceId);
+      if (videoDevices.length > 0 && (!selectedDeviceId || !deviceExists)) {
+        setSelectedDeviceId(videoDevices[0].deviceId);
+      }
+    } catch (err) {
+      console.error('Failed to load camera devices:', err);
+    }
+  };
+
   useEffect(() => {
     if (!dataset) {
-      navigator.mediaDevices.enumerateDevices().then(deviceInfos => {
-        const videoDevices = deviceInfos.filter(d => d.kind === 'videoinput');
-        setDevices(videoDevices);
-        if (videoDevices.length > 0 && !selectedDeviceId) {
-          setSelectedDeviceId(videoDevices[0].deviceId);
-        }
-      });
+      loadDevices();
     }
-  }, [dataset, selectedDeviceId, setSelectedDeviceId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataset]);
 
   const handleSelectFolder = async () => {
     try {

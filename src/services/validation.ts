@@ -41,6 +41,39 @@ export function runFullValidation(
     if (duplicatePkCount > 0) {
       issues.push({ id: generateId(), category: 'dataset', severity: 'error', message: `Found ${duplicatePkCount} records with duplicate primary keys.` });
     }
+
+    // Check for valid phone numbers if a phone/mobile column exists
+    const phoneColumns = dataset.headers.filter(h => {
+      const lower = h.toLowerCase();
+      return lower.includes('phone') || lower.includes('mobile') || lower.includes('contact');
+    });
+
+    phoneColumns.forEach(phoneCol => {
+      let invalidCount = 0;
+      const invalidExamples: string[] = [];
+
+      dataset.records.forEach(record => {
+        const val = String(record[phoneCol] || '').trim();
+        if (val) {
+          // simple regex for phone number: allows +, digits, spaces, hyphens, parentheses, length loosely checked
+          const phoneRegex = /^\+?[\d\s\-\(\)]{7,20}$/;
+          if (!phoneRegex.test(val)) {
+            invalidCount++;
+            if (invalidExamples.length < 3) invalidExamples.push(val);
+          }
+        }
+      });
+
+      if (invalidCount > 0) {
+        issues.push({
+          id: generateId(),
+          category: 'dataset',
+          severity: 'warning',
+          message: `Found ${invalidCount} invalid mobile/phone numbers in column '${phoneCol}'.`,
+          details: `Examples: ${invalidExamples.join(', ')}`
+        });
+      }
+    });
   }
 
   // --- 2. Photo Validation ---
