@@ -29,12 +29,14 @@ export default function CameraInterface({ mode, initialRecordId, onClose }: Came
 
   const stopCamera = () => {
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach(track => {
+        track.stop();
+      });
       streamRef.current = null;
     }
   };
 
-  const startCamera = async (deviceId?: string) => {
+  const startCamera = async (deviceId?: string, abortSignal?: { aborted: boolean }) => {
     setError(null);
     stopCamera();
     try {
@@ -46,6 +48,10 @@ export default function CameraInterface({ mode, initialRecordId, onClose }: Came
         } 
       };
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      if (abortSignal?.aborted) {
+        stream.getTracks().forEach(t => t.stop());
+        return;
+      }
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
@@ -59,22 +65,32 @@ export default function CameraInterface({ mode, initialRecordId, onClose }: Came
         const activeTrack = stream.getVideoTracks()[0];
         if (activeTrack) {
           const trackDeviceId = activeTrack.getSettings().deviceId;
-          if (trackDeviceId) {
+          if (trackDeviceId && trackDeviceId !== selectedDeviceId) {
             setSelectedDeviceId(trackDeviceId);
-          } else {
+          } else if (!trackDeviceId && videoDevices[0].deviceId !== selectedDeviceId) {
             setSelectedDeviceId(videoDevices[0].deviceId);
           }
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Camera error', err);
-      setError('Could not access camera. Please check permissions.');
+      if (err.name === 'NotAllowedError') {
+        setError('Camera access denied. Please grant permission in your browser settings.');
+      } else if (err.name === 'NotFoundError') {
+        setError('No camera found on this device.');
+      } else {
+        setError('Could not access camera: ' + err.message);
+      }
     }
   };
 
   useEffect(() => {
-    startCamera(selectedDeviceId);
-    return () => stopCamera();
+    const abortSignal = { aborted: false };
+    startCamera(selectedDeviceId, abortSignal);
+    return () => {
+      abortSignal.aborted = true;
+      stopCamera();
+    };
   }, [selectedDeviceId]);
 
   const capturePhoto = () => {
