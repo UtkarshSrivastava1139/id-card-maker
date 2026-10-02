@@ -155,7 +155,7 @@ export default function MobileCameraView({ onGoToExport }: MobileCameraViewProps
       </div>
 
       {/* Camera View */}
-      <div style={{ flex: 1, backgroundColor: '#000', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ flex: 1, minHeight: 0, backgroundColor: '#000', position: 'relative', overflow: 'hidden', paddingBottom: '24px' }}>
         {hasPermission === false && (
           <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', textAlign: 'center', color: 'white' }}>
             <p style={{ marginBottom: '16px' }}>Camera access denied or unavailable.</p>
@@ -175,7 +175,7 @@ export default function MobileCameraView({ onGoToExport }: MobileCameraViewProps
       </div>
 
       {/* Bottom Controls */}
-      <div style={{ background: '#1e293b', padding: '24px 16px', borderTopLeftRadius: '24px', borderTopRightRadius: '24px', marginTop: '-24px', position: 'relative', zIndex: 10 }}>
+      <div style={{ background: '#1e293b', padding: '24px 16px calc(24px + env(safe-area-inset-bottom, 0px)) 16px', borderTopLeftRadius: '24px', borderTopRightRadius: '24px', marginTop: '-24px', position: 'relative', zIndex: 10, flexShrink: 0 }}>
         
         {/* Student Info */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>

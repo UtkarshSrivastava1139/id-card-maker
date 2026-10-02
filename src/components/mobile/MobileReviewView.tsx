@@ -13,16 +13,16 @@ export default function MobileReviewView({ photoUrl, onRetake, onSave, record }:
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', backgroundColor: '#000', color: 'white' }}>
       
       {/* Review Image */}
-      <div style={{ flex: 1, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ flex: 1, minHeight: 0, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', paddingBottom: '24px' }}>
         <img 
           src={photoUrl} 
           alt="Captured preview" 
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
         />
       </div>
 
       {/* Bottom Controls */}
-      <div style={{ background: '#1e293b', padding: '24px 16px', borderTopLeftRadius: '24px', borderTopRightRadius: '24px', marginTop: '-24px', position: 'relative', zIndex: 10 }}>
+      <div style={{ background: '#1e293b', padding: '24px 16px calc(24px + env(safe-area-inset-bottom, 0px)) 16px', borderTopLeftRadius: '24px', borderTopRightRadius: '24px', marginTop: '-24px', position: 'relative', zIndex: 10, flexShrink: 0 }}>
         
         {/* Student Info */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>

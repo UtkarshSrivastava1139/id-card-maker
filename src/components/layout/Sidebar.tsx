@@ -1,15 +1,16 @@
-import { Home, Folder, LayoutTemplate, Settings, Camera } from 'lucide-react';
+import { Home, Folder, LayoutTemplate, Settings, Camera, Ticket } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
+import type { AppModule } from '../../App';
 
 interface SidebarProps {
-  activeModule: 'id-card' | 'capture';
-  setActiveModule: (m: 'id-card' | 'capture') => void;
+  activeModule: AppModule;
+  setActiveModule: (m: AppModule) => void;
 }
 
 export default function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
   const closeProject = useProjectStore((state) => state.closeProject);
 
-  const handleNav = (module: 'id-card' | 'capture') => {
+  const handleNav = (module: AppModule) => {
     setActiveModule(module);
     if (module === 'id-card') {
       closeProject(); // Ensure we go back to Dashboard when clicking Home
@@ -42,6 +43,15 @@ export default function Sidebar({ activeModule, setActiveModule }: SidebarProps)
             <Camera size={18} />
             <span>Photo Capture Studio</span>
           </button>
+
+          <button 
+            className={`nav-item ${activeModule === 'outpass' ? 'active' : ''}`}
+            onClick={() => handleNav('outpass')}
+            style={{ width: '100%', border: 'none', background: 'transparent', cursor: 'pointer', textAlign: 'left' }}
+          >
+            <Ticket size={18} />
+            <span>Outpass Generator</span>
+          </button>
         </div>
 
         <div className="nav-section">
@@ -66,3 +76,4 @@ export default function Sidebar({ activeModule, setActiveModule }: SidebarProps)
     </aside>
   );
 }
+

@@ -1,12 +1,13 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
+import type { AppModule } from '../../App';
 import './Layout.css';
 
 interface MainLayoutProps {
   children: React.ReactNode;
-  activeModule: 'id-card' | 'capture';
-  setActiveModule: (m: 'id-card' | 'capture') => void;
+  activeModule: AppModule;
+  setActiveModule: (m: AppModule) => void;
 }
 
 export default function MainLayout({ children, activeModule, setActiveModule }: MainLayoutProps) {
@@ -25,3 +26,4 @@ export default function MainLayout({ children, activeModule, setActiveModule }: 
     </div>
   );
 }
+
