@@ -8,13 +8,12 @@
 
 import { useState, useMemo } from 'react';
 import {
-  Search, Plus, Minus, Printer, Trash2, Check, LayoutTemplate, X, Eye
+  Search, Plus, Minus, Printer, Trash2, LayoutTemplate, X, Eye
 } from 'lucide-react';
 import { outpassRegistry } from '../../services/outpassRegistry';
 import { generateOutpassPdf } from '../../services/outpassGenerator';
 import { useOutpassStore, buildSelectionEntries } from '../../store/outpassStore';
 import { useLayoutStore } from '../../store/layoutStore';
-import type { OutpassDesign } from '../../types/outpass';
 import './OutpassGenerator.css';
 
 export default function OutpassGenerator() {
